@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { sendMoney, receiveMoney } from '../mocks/api';
+import { sendMoney, getMoney } from '../mocks/api';
 
 export default function TransferPage() {
     const [mode, setMode] = useState(null); // 'deposit' | 'send'
@@ -16,11 +16,11 @@ export default function TransferPage() {
     };
 
     const handleSkyDeposit = () => {
-        receiveMoney('user_id', 'sky', amount);
+        getMoney('user_id', amount);
     };
 
     const handleDepositFromOther = () => {
-        receiveMoney(to || 'user_id', from, amount);
+        sendMoney(from,to || 'user_id', amount);
     };
 
     const handleSend = () => {

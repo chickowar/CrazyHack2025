@@ -99,18 +99,61 @@ export async function getHistory(user_id) {
     }
 }
 
-export function sendMoney(from, to, amount) {
+export async function sendMoney(from, to, amount) {
     console.log(`  Отправка средств`);
     console.log(`  От: ${from || 'self'}`);
     console.log(`  Кому: ${to}`);
     console.log(`  Сумма: ${amount}₽`);
+
+    if(from === 'user_id') from = localStorage.getItem('user_id');
+    if(to === 'user_id') to = localStorage.getItem('user_id');
+
+    try {
+        const response = await fetch(`${BACKEND_PATH}/transfer`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                fromUsername: from,
+                toUsername: to,
+                amount: parseInt(amount)
+            }),
+        });
+
+        if (response.ok) {
+            console.log(`Пользователь ${from} отправил ${amount} йопта коинов юзеру ${to}` + response.message);
+        } else {
+            console.error(response.message);
+        }
+    } catch (error) {
+        console.error('Ошибка при отправке запроса:', error);
+    }
     // Тут позже можно будет сделать POST-запрос
 }
 
-export function receiveMoney(to, from = 'sky', amount) {
+export async function getMoney(username, amount) {
     console.log(` Пополнение средств`);
-    console.log(`  Получатель: ${to}`);
-    console.log(`  Источник: ${from}`);
+    console.log(`  Получатель: ${username}`);
     console.log(`  Сумма: ${amount}₽`);
+
+    if(username === 'user_id') username = localStorage.getItem('user_id');
+
+    try {
+        const response = await fetch(`${BACKEND_PATH}/get_money`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                username: username,
+                amount: parseInt(amount)
+            }),
+        });
+
+        if (response.ok) {
+            console.log(`Пользователь ${username} отправил ${amount} йопта коинов юзеру ${username}` + response.message);
+        } else {
+            console.error(response.message);
+        }
+    } catch (error) {
+        console.error('Ошибка при отправке запроса:', error);
+    }
 }
 
