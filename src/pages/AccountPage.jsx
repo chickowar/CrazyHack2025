@@ -28,8 +28,6 @@ export default function AccountPage() {
 
 
     return (
-
-        <div>
             <div className="image-wrapper">
                 <div className="image-container">
                     <div className="image-holder" ref={imageRef}>
@@ -97,13 +95,5 @@ export default function AccountPage() {
                     </div>
                 </div>
             </div>
-
-
-            <div style={{position: "flex"}}>
-                <button className="btn-neutral" onClick={() => navigate('/rating')}>Рейтинг</button>
-                <button className="btn-neutral" onClick={() => navigate('/transfer')}>Перевод</button>
-                <button className="btn-neutral" onClick={() => navigate('/history')}>История</button>
-            </div>
-        </div>
     );
 }

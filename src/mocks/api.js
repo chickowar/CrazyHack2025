@@ -1,3 +1,5 @@
+export const BACKEND_PATH = '/api';
+
 export function getCardData(user_id) {
     return {
         name: "Иван Иванов",
@@ -8,55 +10,32 @@ export function getCardData(user_id) {
     };
 }
 
-export function getHistory() {
-    return [
-        {
-            id: 1,
-            date: "2025-03-30 14:30",
-            amount: 2500,
-            sender: "Иван Иванов",
-            receiver: "Мария Смирнова",
-        },
-        {
-            id: 2,
-            date: "2025-03-29 10:10",
-            amount: 900,
-            sender: "Алексей Кузнецов",
-            receiver: "Иван Иванов",
-        },
-        {
-            id: 3,
-            date: "2025-03-30 14:30",
-            amount: 2500,
-            sender: "Иван Иванов",
-            receiver: "Мария Смирнова",
-        },
-        {
-            id: 4,
-            date: "2025-03-29 10:10",
-            amount: 900,
-            sender: "Алексей Кузнецов",
-            receiver: "Иван Иванов",
-        },
-        {
-            id: 5,
-            date: "2025-03-30 14:30",
-            amount: 2500,
-            sender: "Иван Иванов",
-            receiver: "Мария Смирнова",
-        },
-        {
-            id: 6,
-            date: "2025-03-29 10:10",
-            amount: 900,
-            sender: "Алексей Кузнецов",
-            receiver: "Иван Иванов",
-        },
-    ];
+export async function cancelHistory(transaction_id) {
+}
+
+export async function getHistory(user_id) {
+    try {
+        const response = await fetch(`${BACKEND_PATH}/history?username=${user_id}`);
+        const data = await response.json();
+
+        if (!data.transactions) return [];
+
+        return data.transactions.map(tx => ({
+            id: tx.id,
+            date: new Date(tx.date).toLocaleString('ru-RU'), // формат как раньше
+            amount: tx.amount,
+            sender: tx.fromUserName,
+            receiver: tx.toUserName,
+            status: tx.status,
+        }));
+    } catch (error) {
+        console.error('Ошибка при получении истории:', error);
+        return []; // fallback в случае ошибки
+    }
 }
 
 export function sendMoney(from, to, amount) {
-    console.log(`📤 Отправка средств`);
+    console.log(`  Отправка средств`);
     console.log(`  От: ${from || 'self'}`);
     console.log(`  Кому: ${to}`);
     console.log(`  Сумма: ${amount}₽`);
@@ -64,7 +43,7 @@ export function sendMoney(from, to, amount) {
 }
 
 export function receiveMoney(to, from = 'sky', amount) {
-    console.log(`💰 Пополнение средств`);
+    console.log(` Пополнение средств`);
     console.log(`  Получатель: ${to}`);
     console.log(`  Источник: ${from}`);
     console.log(`  Сумма: ${amount}₽`);

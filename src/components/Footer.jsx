@@ -7,7 +7,7 @@ export default function Footer() {
             marginTop: '30px',
             borderTop: '1px solid #ccc'
         }}>
-            &copy; 2025 МойБанк
+            &copy; 2025 The craziest from MISIS
         </footer>
     );
 }

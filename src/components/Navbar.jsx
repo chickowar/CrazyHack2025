@@ -18,6 +18,9 @@ export default function Navbar() {
             <Link to="/account" className={`nav-link ${isActive('/account') ? 'active' : ''}`}>Аккаунт</Link>
             <Link to="/transfer" className={`nav-link ${isActive('/transfer') ? 'active' : ''}`}>Перевод</Link>
             <Link to="/history" className={`nav-link ${isActive('/history') ? 'active' : ''}`}>История</Link>
+            <Link to="/rating" className={`nav-link ${isActive('/rating') ? 'active' : ''}`}>Рейтинг</Link>
+            <Link to="/login" className={`nav-link ${isActive('/login') ? 'active' : ''}`}>Логин</Link>
+
         </nav>
     );
 }

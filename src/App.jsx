@@ -5,8 +5,14 @@ import AccountPage from './pages/AccountPage';
 import TransferPage from './pages/TransferPage';
 import HistoryPage from './pages/HistoryPage';
 import TestPage from './pages/TestPage';
+import {useEffect} from "react";
 
 function App() {
+
+    useEffect(() => {
+        localStorage.setItem('user_id', 'ivan');
+    }, []);
+
     return (
         <div className="layout-wrapper">
             <Navbar />

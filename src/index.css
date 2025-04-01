@@ -1,7 +1,7 @@
 :root {
-  --color-body-bg: #f9f9fb;
-  --color-body-secondary: #e6e6ec;
-  --color-body-tertiary: #d1d1d8;
+  --color-body-bg:  #00FFFF;
+  --color-body-secondary: #0000FF;
+  --color-body-tertiary:  #00FF00;
   --color-text: #222;
   --color-button-cancel: #e74c3c;
   --color-button-accept: #2ecc71;
