@@ -99,18 +99,48 @@ export async function getHistory(user_id) {
     }
 }
 
-export function sendMoney(from, to, amount) {
-    console.log(`  Отправка средств`);
-    console.log(`  От: ${from || 'self'}`);
-    console.log(`  Кому: ${to}`);
-    console.log(`  Сумма: ${amount}₽`);
-    // Тут позже можно будет сделать POST-запрос
+export async function sendMoney(from, to, amount) {
+    try {
+        const res = await fetch(`${BACKEND_PATH}/transfer`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                fromUsername: from,
+                toUsername: to,
+                amount: amount,
+            }),
+        });
+
+        if (!res.ok) {
+            const data = await res.json();
+            throw new Error(data.message || 'Ошибка перевода');
+        }
+
+        console.log(`Переведено ${amount}₽ от ${from} к ${to}`);
+    } catch (err) {
+        throw err;
+    }
 }
 
-export function receiveMoney(to, from = 'sky', amount) {
-    console.log(` Пополнение средств`);
-    console.log(`  Получатель: ${to}`);
-    console.log(`  Источник: ${from}`);
-    console.log(`  Сумма: ${amount}₽`);
+export async function receiveMoney(to, amount) {
+    try {
+        const res = await fetch(`${BACKEND_PATH}/get_money`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                username: to,
+                amount: amount,
+            }),
+        });
+
+        if (!res.ok) {
+            const data = await res.json();
+            throw new Error(data.message || 'Ошибка пополнения');
+        }
+
+        console.log(`Пополнено ${amount}₽ на ${to}`);
+    } catch (err) {
+        throw err;
+    }
 }
 

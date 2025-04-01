@@ -9,22 +9,65 @@ export default function TransferPage() {
     const [from, setFrom] = useState('');
     const [to, setTo] = useState('');
 
+    const user_id = localStorage.getItem('user_id');
+
+    const [alert, setAlert] = useState(null);
+    const showError = (message) => {
+        setAlert(message);
+        setTimeout(() => setAlert(null), 4000);
+    };
+
     const resetFields = () => {
         setAmount('');
         setFrom('');
         setTo('');
     };
 
-    const handleSkyDeposit = () => {
-        receiveMoney('user_id', 'sky', amount);
+    const handleSkyDeposit = async () => {
+        const num = parseFloat(amount);
+        if (isNaN(num) || num <= 0 || num > 50) {
+            showError("Значение должно быть числом от 0 до 50");
+        } else {
+            try {
+                await receiveMoney(user_id, num);
+            } catch (err) {
+                showError(err.message);
+            }
+        }
     };
 
-    const handleDepositFromOther = () => {
-        receiveMoney(to || 'user_id', from, amount);
+    const handleDepositFromOther = async () => {
+        const num = parseFloat(amount);
+        if (isNaN(num) || num <= 0) {
+            showError("Сумма некорректна");
+            return;
+        }
+        if (!from) {
+            showError("Не указан отправитель (from)");
+            return;
+        }
+        try {
+            await sendMoney(from, to || user_id, num);
+        } catch (err) {
+            showError(err.message);
+        }
     };
 
-    const handleSend = () => {
-        sendMoney(from || 'user_id', to, amount);
+    const handleSend = async () => {
+        const num = parseFloat(amount);
+        if (isNaN(num) || num <= 0) {
+            showError("Сумма некорректна");
+            return;
+        }
+        if (!to) {
+            showError("Не указан получатель (to)");
+            return;
+        }
+        try {
+            await sendMoney(from || user_id, to, num);
+        } catch (err) {
+            showError(err.message);
+        }
     };
 
     return (
@@ -122,6 +165,23 @@ export default function TransferPage() {
                         onChange={e => setAmount(e.target.value)}
                     />
                     <button className="btn-neutral" onClick={handleSend}>Отправить</button>
+                </div>
+            )}
+            {alert && (
+                <div style={{
+                    position: 'fixed',
+                    bottom: '20px',
+                    right: '20px',
+                    backgroundColor: '#e74c3c',
+                    color: 'white',
+                    padding: '12px 20px',
+                    borderRadius: '6px',
+                    boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
+                    zIndex: 1000,
+                    fontWeight: 'bold',
+                    fontSize: '14px',
+                }}>
+                    {alert}
                 </div>
             )}
         </div>
