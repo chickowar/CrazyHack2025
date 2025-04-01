@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect, useRef } from 'react';
 import $ from 'jquery';
 import { gsap } from 'gsap';
-import {getRegistered} from "../mocks/api.js";
+import {getCardData, getRegistered, logIn} from "../mocks/api.js";
 
 const USERS = [
   {id: '1', pwd: '123', card: '1111222233334444', cvv: '123', exp: '12/24', balance: 1000},
@@ -135,25 +135,27 @@ function RegistrationP() {
 
   const doStuff = async (e) => {
     e.preventDefault();
-    let success = false;
     console.log("doStuff: ", formData);
 
     if (mode === 'login') {
-      USERS.forEach((u) => {
-        if (u.pwd === formData.pwd) {
-          if (u.id === formData.id) {
-            success = true;
-            navigate(`../account`);
-          } else {
-            setError('У User ' + u.id + ' этот пароль! Вы сдурели?!');
-          }
+
+      const retStatus = await logIn(formData.id, formData.pwd);
+      console.log("resStatus from login: ", retStatus);
+
+      if (retStatus === 200) {
+        localStorage.setItem("user_id", formData.id);
+        navigate(`../account`);
+      } else {
+        if (retStatus === 401) {
+          const realPass = getCardData(formData.id).password;
+          setError(`У ${formData.id} пароль ${realPass}! Вы сдурели?!`);
+        } else {
+          setError('Наталья, походу мы обосрались!!!! Проверь данные, идиот')
         }
-      });
-      if (!success) {
-        setError('Наталья, походу мы обосрались!!!! Проверь данные, идиот');
       }
+
+
     } else {
-      // ✅ Регистрация
       if (formData.pwd && formData.card && formData.cvv && formData.id) {
         try {
           await getRegistered(
@@ -167,7 +169,7 @@ function RegistrationP() {
           setMode('login'); // переключим режим обратно
           setError(null);
         } catch (err) {
-          setError('🚨 Ошибка регистрации: ' + err.message);
+          setError('Ошибка регистрации: ' + err.message);
         }
       } else {
         setError('Пошел НАХУЙ по-братски!!! ПОЛЯ ПУСТЫЕ КАК И ТВОЯ ГАЛАВА');

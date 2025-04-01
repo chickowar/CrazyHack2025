@@ -11,9 +11,9 @@ import RatingPage from './pages/RatingPage'
 
 function App() {
 
-    useEffect(() => {
-        localStorage.setItem('user_id', 'ivan');
-    }, []);
+    // useEffect(() => {
+    //     localStorage.setItem('user_id', 'ivan');
+    // }, []);
 
     return (
         <div className="layout-wrapper">

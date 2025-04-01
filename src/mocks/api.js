@@ -7,8 +7,31 @@ export function getCardData(user_id) {
         cardNumber: "1234 5678 9012 3456",
         cvv: "123",
         expiry: "12/26",
+        password: "pswrd"
     };
 }
+
+export async function logIn(username, password) {
+    try {
+        const response = await fetch(`${BACKEND_PATH}/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                username: username,
+                password: password,
+            }),
+        });
+        if (response.ok) {
+            console.log(`Вошли как ${username}`);
+        } else {
+            console.error(response);
+        }
+        return response.status;
+    } catch (error) {
+        console.error('Ошибка при отправке запроса:', error);
+    }
+}
+
 
 export async function getRegistered(username, password, cvv, cardNumber) {
     try {
@@ -29,7 +52,7 @@ export async function getRegistered(username, password, cvv, cardNumber) {
             console.error(response.message);
         }
     } catch (error) {
-        console.error('Ошибка при отправке запроса на отмену:', error);
+        console.error('Ошибка при отправке запроса:', error);
     }
 }
 
