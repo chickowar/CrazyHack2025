@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect, useRef } from 'react';
 import $ from 'jquery';
 import { gsap } from 'gsap';
@@ -12,6 +13,7 @@ function RegistrationP() {
   const [formData, setFormData] = useState({});
   const [error, setError] = useState(null);
   const buttonRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const button = $(buttonRef.current).find('.button--bubble');
@@ -139,7 +141,7 @@ function RegistrationP() {
         if(u.pwd === formData.pwd) {
           if(u.id === formData.id) {
             x = true;
-            alert('Welcome user ' + u.id + '! Your balance is: ' + u.balance);
+            navigate(`../account`);
           } else {
             setError('У User ' + u.id + ' этот пароль! Вы сдурели?!');
           }
