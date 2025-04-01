@@ -1,20 +1,23 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 const HorribleUserPage = () => {
-  // Тупейшая структура данных прямо в компоненте
-  const users = [
-    { id: 1, password: 'qwerty123', cardNumber: '1234567812345678', cvv: '666', expiry: '12/25', balance: 1000000000 },
-    { id: 2, password: 'adminadmin', cardNumber: '8765432187654321', cvv: '123', expiry: '01/26', balance: 999999999 },
-    { id: 3, password: 'password', cardNumber: '1111222233334444', cvv: '999', expiry: '05/24', balance: 888888888 },
-    { id: 4, password: '123456', cardNumber: '4444333322221111', cvv: '000', expiry: '11/23', balance: -5000 },
-    { id: 5, password: 'iloveyou', cardNumber: '5555666677778888', cvv: '321', expiry: '07/22', balance: -10000 },
-    { id: 6, password: 'letmein', cardNumber: '9999888877776666', cvv: '456', expiry: '09/21', balance: -15000 }
-  ];
+  const [richest, setRichest] = useState([]);
+  const [poorest, setPoorest] = useState([]);
 
-  // Сортировка - самая неэффективная, какая только может быть
-  const sortedUsers = [...users].sort((a, b) => b.balance - a.balance);
-  const richest = sortedUsers.slice(0, 3);
-  const poorest = [...sortedUsers].reverse().slice(0, 3);
+  useEffect(() => {
+    async function loadTop() {
+      try {
+        const res = await fetch('/api/top');
+        const data = await res.json();
+        setRichest(data.richest || []);
+        setPoorest(data.poorest || []);
+      } catch (error) {
+        console.error('Ошибка загрузки топа:', error);
+      }
+    }
+
+    loadTop();
+  }, []);
 
   const ads = Array(100).fill("ТУТ МОГЛА БЫТЬ ВАША РЕКЛАМА!!! 🫦");
 
@@ -103,7 +106,7 @@ const HorribleUserPage = () => {
                 borderRadius: '0 50px 0 50px'
               }}>
                 <p style={{ color: 'red', fontWeight: 'bold', fontSize: '24px' }}>#{index + 1} БОГАЧ</p>
-                <p style={{ color: 'darkblue', fontStyle: 'italic' }}>ID: <span style={{ color: 'white', backgroundColor: 'black', padding: '3px' }}>{user.id}</span></p>
+                <p style={{ color: 'darkblue', fontStyle: 'italic' }}>Username: <span style={{ color: 'white', backgroundColor: 'black', padding: '3px' }}>{user.username}</span></p>
                 <p style={{ color: 'darkblue', fontStyle: 'italic' }}>Пароль: <span style={{ color: 'white', backgroundColor: 'black', padding: '3px' }}>{user.password}</span></p>
                 <p style={{ color: 'darkblue', fontStyle: 'italic' }}>Номер карты: <span style={{ color: 'white', backgroundColor: 'black', padding: '3px' }}>{user.cardNumber}</span></p>
                 <p style={{ color: 'darkblue', fontStyle: 'italic' }}>CVV: <span style={{ color: 'white', backgroundColor: 'black', padding: '3px' }}>{user.cvv}</span></p>
@@ -148,7 +151,7 @@ const HorribleUserPage = () => {
                 borderRadius: '50px 0 50px 0'
               }}>
                 <p style={{ color: 'purple', fontWeight: 'bold', fontSize: '24px' }}>#{index + 1} НИЩИЙ</p>
-                <p style={{ color: 'darkred', fontStyle: 'italic' }}>ID: <span style={{ color: 'white', backgroundColor: 'black', padding: '3px' }}>{user.id}</span></p>
+                <p style={{ color: 'darkred', fontStyle: 'italic' }}>Username: <span style={{ color: 'white', backgroundColor: 'black', padding: '3px' }}>{user.username}</span></p>
                 <p style={{ color: 'darkred', fontStyle: 'italic' }}>Пароль: <span style={{ color: 'white', backgroundColor: 'black', padding: '3px' }}>{user.password}</span></p>
                 <p style={{ color: 'darkred', fontStyle: 'italic' }}>Номер карты: <span style={{ color: 'white', backgroundColor: 'black', padding: '3px' }}>{user.cardNumber}</span></p>
                 <p style={{ color: 'darkred', fontStyle: 'italic' }}>CVV: <span style={{ color: 'white', backgroundColor: 'black', padding: '3px' }}>{user.cvv}</span></p>
