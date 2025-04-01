@@ -1,4 +1,9 @@
 ```shell
+cd ./backend/
+docker compose up -d
+```
+
+```shell
 npm install
 ```
 
