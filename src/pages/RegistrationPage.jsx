@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect, useRef } from 'react';
 import $ from 'jquery';
 import { gsap } from 'gsap';
+import {getRegistered} from "../mocks/api.js";
 
 const USERS = [
   {id: '1', pwd: '123', card: '1111222233334444', cvv: '123', exp: '12/24', balance: 1000},
@@ -132,35 +133,42 @@ function RegistrationP() {
     });
   }, [mode]);
 
-  const doStuff = (e) => {
+  const doStuff = async (e) => {
     e.preventDefault();
-    let x = false;
+    let success = false;
+    console.log("doStuff: ", formData);
 
-    if(mode === 'login') {
+    if (mode === 'login') {
       USERS.forEach((u) => {
-        if(u.pwd === formData.pwd) {
-          if(u.id === formData.id) {
-            x = true;
+        if (u.pwd === formData.pwd) {
+          if (u.id === formData.id) {
+            success = true;
             navigate(`../account`);
           } else {
             setError('У User ' + u.id + ' этот пароль! Вы сдурели?!');
           }
         }
       });
-      if(!x) {
+      if (!success) {
         setError('Наталья, походу мы обосрались!!!! Проверь данные, идиот');
       }
     } else {
-      if(formData.pwd && formData.card && formData.cvv) {
-        USERS.push({
-          id: String(USERS.length + 1),
-          pwd: formData.pwd,
-          card: formData.card,
-          cvv: formData.cvv,
-          exp: formData.exp || '01/99',
-          balance: Math.floor(Math.random() * 1000)
-        });
-        alert('OK! ID: ' + USERS[USERS.length-1].id);
+      // ✅ Регистрация
+      if (formData.pwd && formData.card && formData.cvv && formData.id) {
+        try {
+          await getRegistered(
+              formData.id,
+              formData.pwd,
+              formData.cvv,
+              formData.card
+          );
+
+          alert('Зарегистрирован! Теперь войди под ID: ' + formData.id);
+          setMode('login'); // переключим режим обратно
+          setError(null);
+        } catch (err) {
+          setError('🚨 Ошибка регистрации: ' + err.message);
+        }
       } else {
         setError('Пошел НАХУЙ по-братски!!! ПОЛЯ ПУСТЫЕ КАК И ТВОЯ ГАЛАВА');
       }
@@ -203,15 +211,13 @@ function RegistrationP() {
         <h1 style={{color: 'red', textTransform: 'uppercase', textDecoration: 'underline'}}>
           {mode === 'login' ? 'LOGIN NOW!!!' : 'REGISTER NOW!!!'}
         </h1>
-        
-        {mode === 'login' && (
-          <input 
-            type="text"
-            placeholder="YOUR ID HERE!!!"
-            onChange={(e) => setFormData({...formData, id: e.target.value})}
-            style={{fontSize: '20px', margin: '10px', border: '3px dashed blue'}}
-          />
-        )}
+
+        <input
+          type="text"
+          placeholder="USERNAME HERE!!!"
+          onChange={(e) => setFormData({...formData, id: e.target.value})}
+          style={{fontSize: '20px', margin: '10px', border: '3px dashed blue'}}
+        />
         
         <input 
           type="password"

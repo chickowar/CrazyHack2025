@@ -10,7 +10,27 @@ export function getCardData(user_id) {
     };
 }
 
-export async function cancelHistory(transaction_id) {
+export async function getRegistered(username, password, cvv, cardNumber) {
+    try {
+        const response = await fetch(`${BACKEND_PATH}/auth/register`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                username: username,
+                password: password,
+                cvv: cvv,
+                cardNumber: cardNumber,
+            }),
+        });
+
+        if (response.ok) {
+            console.log(`Пользователь ${username} зареган`);
+        } else {
+            console.error(response.message);
+        }
+    } catch (error) {
+        console.error('Ошибка при отправке запроса на отмену:', error);
+    }
 }
 
 export async function getHistory(user_id) {

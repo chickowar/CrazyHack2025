@@ -16,9 +16,9 @@ export default function TransactionItem({ tx }) {
 
             if (response.ok) {
                 setStatus('Cancelled');
-                console.log(`✅ Операция ${tx.id} успешно отменена`);
+                console.log(`Операция ${tx.id} успешно отменена`);
             } else {
-                console.error(`❌ Ошибка отмены операции ${tx.id}`);
+                console.error(`Ошибка отмены операции ${tx.id}`);
             }
         } catch (error) {
             console.error('Ошибка при отправке запроса на отмену:', error);
