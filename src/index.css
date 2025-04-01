@@ -54,12 +54,14 @@ html, body, #root {
   margin: 0;
   display: flex;
   flex-direction: column;
+  background-image: "../public/images/ептамужык.png";
 }
 
 body {
   background-color: var(--color-body-bg);
   color: var(--color-text);
   font-family: sans-serif;
+  background-image: url("/images/ептамужык.png");
 }
 
 main {
@@ -87,6 +89,7 @@ main {
   flex: 1;
   overflow-y: auto;
   padding: 20px;
+  color: #c0392b;
 }
 
 
