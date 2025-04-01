@@ -1,22 +1,29 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import AccountPage from './pages/AccountPage';
 import TransferPage from './pages/TransferPage';
 import HistoryPage from './pages/HistoryPage';
 import TestPage from './pages/TestPage';
-import {useEffect} from "react";
 import RegistrationPage from './pages/RegistrationPage';
-import RatingPage from './pages/RatingPage'
+import RatingPage from './pages/RatingPage';
 
 function App() {
+    const location = useLocation();
+    const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     localStorage.setItem('user_id', 'ivan');
-    // }, []);
+    useEffect(() => {
+        const publicRoutes = ['/login', '/rating'];
+        const currentPath = location.pathname;
+        const user_id = localStorage.getItem('user_id');
 
-    // @TODO: ДОБАВИТЬ ОБРАБОТКУ, ЧТО ЕСЛИ ТЫ НЕ НА СТРАНИЧКЕ rating или register,
-    // @TODO: то тебя должно кидать на login, если у тебя нету в localStorage user_id
+        if (!user_id && !publicRoutes.includes(currentPath)) {
+            console.warn('Нет user_id в localStorage. Редирект на /login');
+            navigate('/login');
+        }
+    }, [location]);
 
     return (
         <div className="layout-wrapper">
