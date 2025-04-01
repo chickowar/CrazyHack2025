@@ -147,7 +147,7 @@ function RegistrationP() {
         navigate(`../account`);
       } else {
         if (retStatus === 401) {
-          const realPass = getCardData(formData.id).password;
+          const realPass = (await getCardData(formData.id)).password;
           setError(`У ${formData.id} пароль ${realPass}! Вы сдурели?!`);
         } else {
           setError('Наталья, походу мы обосрались!!!! Проверь данные, идиот')

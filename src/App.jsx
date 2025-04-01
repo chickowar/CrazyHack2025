@@ -15,6 +15,9 @@ function App() {
     //     localStorage.setItem('user_id', 'ivan');
     // }, []);
 
+    // @TODO: ДОБАВИТЬ ОБРАБОТКУ, ЧТО ЕСЛИ ТЫ НЕ НА СТРАНИЧКЕ rating или register,
+    // @TODO: то тебя должно кидать на login, если у тебя нету в localStorage user_id
+
     return (
         <div className="layout-wrapper">
             <Navbar />

@@ -1,14 +1,36 @@
 export const BACKEND_PATH = '/api';
 
-export function getCardData(user_id) {
-    return {
-        name: "Иван Иванов",
-        balance: 12430,
-        cardNumber: "1234 5678 9012 3456",
-        cvv: "123",
-        expiry: "12/26",
-        password: "pswrd"
-    };
+export async function getCardData(user_id) {
+    try {
+        const response = await fetch(`${BACKEND_PATH}/account?username=${user_id}`);
+
+        if (!response.ok) {
+            throw new Error('Ошибка запроса данных аккаунта');
+        }
+
+        const data = await response.json();
+        console.log('in getCardData got:', data);
+
+        // Преобразуем в ожидаемый фронтом формат
+        return {
+            name: data.name || data.username || 'Имя не указано',
+            balance: data.balance || 0,
+            cardNumber: data.cardNumber || '0000 0000 0000 0000',
+            cvv: data.cvv || '000',
+            expiry: data.expiry || '01/99',
+            password: data.password || '',
+        };
+    } catch (error) {
+        console.error('Ошибка при получении данных аккаунта:', error);
+        return {
+            name: 'Ошибка',
+            balance: 0,
+            cardNumber: '',
+            cvv: '',
+            expiry: '',
+            password: '',
+        };
+    }
 }
 
 export async function logIn(username, password) {

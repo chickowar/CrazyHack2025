@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useRef, useLayoutEffect, useState } from 'react';
+import {useRef, useLayoutEffect, useState, useEffect} from 'react';
 import { getCardData } from '../mocks/api';
 
 export default function AccountPage() {
@@ -22,9 +22,16 @@ export default function AccountPage() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    const [card, setCard] = useState({});
 
-    const navigate = useNavigate();
-    const card = getCardData(1);
+    useEffect(() => {
+        async function loadCard() {
+            const data = await getCardData(localStorage.getItem('user_id')); // замените на актуального пользователя
+            setCard(data);
+        }
+
+        loadCard();
+    }, []);
 
 
     return (
@@ -50,10 +57,10 @@ export default function AccountPage() {
                                 left: `5%`,
                                 bottom: `10%`,
                                 fontSize: `${imageWidth * 0.04}px`,
-                                transform: `rotate(${-50}deg)`,
+                                transform: `rotate(-50deg)`,
                             }}
                         >
-                            {card.balance} ₽
+                            {card.balance != null ? `${Number(card.balance).toFixed(2)} ₽` : '0.00 ₽'}
                         </div>
 
                         <div
