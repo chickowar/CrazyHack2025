@@ -1,0 +1,24 @@
+.transaction-item {
+    border-bottom: 1px solid #ccc;
+    padding: 20px 10px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.transaction-item .center {
+    display: flex;
+    justify-content: flex-start;
+}
+
+@media (max-width: 600px) {
+    .transaction-item {
+        align-items: center;
+        text-align: center;
+    }
+
+    .transaction-item .center {
+        justify-content: center;
+    }
+}
