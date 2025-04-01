@@ -141,7 +141,7 @@ function RegistrationP() {
             x = true;
             alert('Welcome user ' + u.id + '! Your balance is: ' + u.balance);
           } else {
-            setError('User ' + u.id + ' has same password! Security breach!');
+            setError('У User ' + u.id + ' этот пароль! Вы сдурели?!');
           }
         }
       });

@@ -6,6 +6,7 @@ import TransferPage from './pages/TransferPage';
 import HistoryPage from './pages/HistoryPage';
 import TestPage from './pages/TestPage';
 import RegistrationPage from './pages/RegistrationPage';
+import RatingPage from './pages/RatingPage'
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
                     <Route path="/transfer" element={<TransferPage />} />
                     <Route path="/history" element={<HistoryPage />} />
                     <Route path="/test" element={<TestPage />} />
+                    <Route path="/rating" element={<RatingPage />} />
                 </Routes>
             </main>
             <Footer />
